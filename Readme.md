@@ -1,4 +1,4 @@
-Ohjelmistotekniikan harjoitustyö
+Ohjelmistotekniikan harjoitustyÃ¶
 ================================
-[Määrittelydokumentti (en)](../blob/master/Harjoitustyö/Documentation/requirements_specification.md)
-[Työaikakirjanpito (en)](../blob/master/Harjoitustyö/Documentation/record_of_work_hours.md)
+[MÃ¤Ã¤rittelydokumentti (en)](../master/HarjoitustyÃ¶/Documentation/requirements_specification.md)
+[TyÃ¶aikakirjanpito (en)](../master/HarjoitustyÃ¶/Documentation/record_of_work_hours.md)
