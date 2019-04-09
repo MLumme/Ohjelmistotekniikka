@@ -17,10 +17,30 @@ Here GM is the standard gravitational parameter in km^3/s^2, x,y,z:s are the com
 Currently, there is an file for testing, Test_Input.dat, with parameters for Sun and Earth in folder GravitationalIntegrator
 for running the program.
 
+Command Line
+============
+Tests can be run with: 
+```
+mvn test
+```
+
+Checkstyle can be run with
+```
+mvn jxr:jxr checkstyle:checkstyle
+```
+
+Test coverage with jacoco can be run with
+```
+mvn jacoco:report
+```
+
 Documentation
 =============
 [Software requirements specification](../master/Harjoitustyö/Documentation/requirements_specification.md)
 
 [Record of work hours](../master/Harjoitustyö/Documentation/record_of_work_hours.md)
+
+[Architectural diagram]
+(../master/Harjoitustyö/Documentation/architecture.md)
 
 
