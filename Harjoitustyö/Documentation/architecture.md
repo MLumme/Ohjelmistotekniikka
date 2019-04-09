@@ -1,1 +1,1 @@
-![Architectural diagram](https://github.com/MLumme/Ohjelmistotekniikka/blob/master/Harjoitustyö/architecture.png)
+![Architectural diagram](https://github.com/MLumme/Ohjelmistotekniikka/blob/master/Harjoitustyö/Documentation/architecture.png)
