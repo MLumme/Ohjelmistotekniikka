@@ -1,6 +1,10 @@
 Current status
 ==============
-Currently software should be capable of loading parameters for simulated objects from input file, and run simulation with given timesteps and total simulation time, printing out parameters from file, and parameters after completing integration.
+If nothing has broken horribly when run, software should open a GUI, where one needs to load in datafile by using Load Data from File-menu in top bar, rest of the options are just placeholders, which should open a file explorer screen, and if loading was succesfull parameters are shown in the center of the GUI.
+
+ Additionally total time of simulation and timestep (dT) must be inserted into the bottom bar and submitted by pressing the sublit button, after which integration can be run by pressing the imaginatively named run-button. after the integration is finished table should update to show the resulting parameters for bodies after integration.
+
+Note that file structure is not nearly finnished, UI.java will be split into smaller components when it works as a whole, and FileHandler.java and the future files concerned with file I/O and formatting will probably be moved into their own folder. 
 
 Input File
 ==========

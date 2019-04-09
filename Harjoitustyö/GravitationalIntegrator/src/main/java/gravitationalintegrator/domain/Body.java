@@ -1,28 +1,28 @@
 
-package com.mycompany.gravitationalintegrator;
+package gravitationalintegrator.domain;
 
 import org.apache.commons.math3.linear.RealVector;
 
 public class Body {
-    final double GM;
+    final double gm;
     RealVector loc;
     RealVector vel;
 
-    public Body(double GM, RealVector loc, RealVector vel) {
-        this.GM = GM;
+    public Body(double gm, RealVector loc, RealVector vel) {
+        this.gm = gm;
         this.loc = loc;
         this.vel = vel;
     }
     
     //constructor for copying class members
     public Body(Body toCopy) {
-        this.GM = toCopy.getGM();
+        this.gm = toCopy.getGm();
         this.loc = toCopy.getLoc();
         this.vel = toCopy.getVel();
     }
 
-    public double getGM() {
-        return GM;
+    public double getGm() {
+        return gm;
     }
 
     public RealVector getLoc() {
@@ -43,8 +43,8 @@ public class Body {
 
     @Override
     public String toString() {
-        return GM + " " + loc.getEntry(0) + " " + loc.getEntry(1)
+        return gm + " " + loc.getEntry(0) + " " + loc.getEntry(1)
                 + " " + loc.getEntry(2) + " " + vel.getEntry(0)
-                + " " + vel.getEntry(1)+ " " + vel.getEntry(2);
+                + " " + vel.getEntry(1) + " " + vel.getEntry(2);
     }
 }
