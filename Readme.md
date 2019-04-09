@@ -40,7 +40,6 @@ Documentation
 
 [Record of work hours](../master/Harjoitustyö/Documentation/record_of_work_hours.md)
 
-[Architectural diagram]
-(../master/Harjoitustyö/Documentation/architecture.md)
+[Architectural diagram](../master/Harjoitustyö/Documentation/architecture.md)
 
 
