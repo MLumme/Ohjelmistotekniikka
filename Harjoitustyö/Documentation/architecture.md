@@ -1,6 +1,6 @@
 Class Diagram
 =============
-![Class diagram](https://github.com/MLumme/Ohjelmistotekniikka/blob/master/Harjoitustyö/Documentation/Architecture.png)
+![Class diagram](https://github.com/MLumme/Ohjelmistotekniikka/blob/master/Harjoitustyö/Documentation/architecture.png)
 
 Sequence Diagrams
 =================
