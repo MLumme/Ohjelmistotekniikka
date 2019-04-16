@@ -68,7 +68,7 @@ java -jar GravitationalIntegrator
 
 Current Release Version
 =======================
-[Software requirements specification](https://github.com/MLumme/Ohjelmistotekniikka/releases/tag/Week5)
+[Current release](https://github.com/MLumme/Ohjelmistotekniikka/releases/tag/Week5)
 
 Documentation
 =============
