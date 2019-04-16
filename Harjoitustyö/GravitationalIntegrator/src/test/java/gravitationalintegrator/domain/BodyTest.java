@@ -17,7 +17,7 @@ public class BodyTest {
         body = new Body(1.6, new ArrayRealVector(new double[]{0.75, 0.5, 1.0}), new ArrayRealVector(new double[]{0.01, 0.05, 0.1}));        
     }
     
-    //Test that body toString works 
+    //Test that body toString works, (and that constructor is thus also working) 
     @Test
     public void testToString(){
         String expected = "1.6 0.75 0.5 1.0 0.01 0.05 0.1";
@@ -26,9 +26,16 @@ public class BodyTest {
     
     //Test that body copying works as intended via toString
     @Test
-    public void testCloning() {
+    public void testCloningConstructor() {
         Body copyBody = new Body(body);
         assertEquals(body.toString(), copyBody.toString());
+    }
+    
+    //Test that clone new object
+    public void testCloneNewObject() {
+        Body copyBody = new Body(body);
+        
+        assertFalse(body == copyBody);
     }
     
     @Test
@@ -50,14 +57,14 @@ public class BodyTest {
     
     @Test
     public void testBodySetLoc() {
-        RealVector loc = new ArrayRealVector(new double[]{-0.75,0.5,-1.0});
+        RealVector loc = new ArrayRealVector(new double[]{-0.75, 0.5, -1.0});
         body.setLoc(loc);
         assertEquals(loc, body.getLoc());
     }
     
     @Test
     public void testBodySetVel() {
-        RealVector vel = new ArrayRealVector(new double[]{0.01,-0.05,-0.1});
+        RealVector vel = new ArrayRealVector(new double[]{0.01, -0.05, -0.1});
         body.setVel(vel);
         assertEquals(vel, body.getVel());
     }

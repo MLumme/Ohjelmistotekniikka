@@ -17,25 +17,28 @@ public final class Sys {
     }
     
     public Sys(Sys toCopy) {
+        bodies = new ArrayList<>();
+        
         this.currentT = toCopy.getT();
         this.com = toCopy.getCom();
         for (Body body: toCopy.getBodies()) {
             this.bodies.add(new Body(body));
         }
+        
+        this.com = this.updateCom();
     }
     
-    public RealVector updateCom() {
-        RealVector updatedCOM = new ArrayRealVector(new double[]{0, 0, 0});
-        double systemGM = 0;
+    private RealVector updateCom() {
+        RealVector updatedCom = new ArrayRealVector(new double[]{0.0, 0.0, 0.0});
+        double systemGm = 0;
         
         for (Body body: bodies) {
-            updatedCOM.add(body.getLoc().mapMultiply(body.getGm()));
-            systemGM += body.getGm();
+            updatedCom = updatedCom.add(body.getLoc().mapMultiply(body.getGm()));
+            systemGm += body.getGm();
         }
         
-        updatedCOM.mapDivide(systemGM);
-
-        return updatedCOM;
+        updatedCom = updatedCom.mapDivide(systemGm);
+        return updatedCom;
     }
 
     public ArrayList<Body> getBodies() {
@@ -45,6 +48,12 @@ public final class Sys {
     public void setBodies(ArrayList<Body> bodies) {
         this.bodies = bodies;
         this.com = this.updateCom();
+    }
+    
+    public void recenter() {
+        for (Body body: bodies) {
+            
+        }
     }
     
     public RealVector getCom() {
@@ -61,9 +70,9 @@ public final class Sys {
 
     @Override
     public String toString() {
-        String output = "";
+        String output = this.currentT + "\n";
         for (Body body: this.bodies) {
-            output += this.currentT + "\n" + body.toString() + "\n";
+            output += body.toString() + "\n";
         }
         
         return output;

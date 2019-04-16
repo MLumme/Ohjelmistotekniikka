@@ -4,10 +4,7 @@ package gravitationalintegrator.domain;
 import java.util.ArrayList;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -41,18 +38,19 @@ public class IntegratorTest {
         Body body = sys.getBodies().get(0);
         
         RealVector acc = leapfrog.acceleration(body, 0);
-        RealVector expected = new ArrayRealVector(new double[]{-2.0, 0.0, -3.0});
+        RealVector expected = new ArrayRealVector(new double[]{2.0, 0.0, 3.0});
         
-        assertEquals(expected, acc);
+        assertEquals(expected.toString(), acc.toString());
     }
 
+    @Test
     public void testAcceleration2() {
         Body body = sys.getBodies().get(1);
         
         RealVector acc = leapfrog.acceleration(body, 1);
-        RealVector expected = new ArrayRealVector(new double[]{1.0, 0.0, -3.0/Math.pow(2.0, 1.5)});
+        RealVector expected = new ArrayRealVector(new double[]{-1.0 - 3.0/Math.pow(2.0, 1.5), 0.0, 3.0/Math.pow(2.0, 1.5)});
         
-        assertEquals(expected, acc);        
+        assertEquals(expected.toString(), acc.toString());        
     }
     
     //Test that current time is correct after update

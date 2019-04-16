@@ -27,7 +27,7 @@ public class Integrator {
             
             RealVector distVec = body.getLoc().subtract(effector.getLoc());
 
-            acc = acc.add(distVec.unitVector()
+            acc = acc.subtract(distVec.unitVector()
                     .mapMultiply(effector.getGm())
                     .mapDivide(Math.pow(distVec.getNorm(), 2.0)));
         }
@@ -63,13 +63,5 @@ public class Integrator {
         
         sys.setBodies(newBodies);
         sys.setT(sys.getT() + deltaT); 
-    }
-    
-    public void updateFull(double totalT) {
-        double currT = 0.0;
-        while (currT < totalT) {
-            this.updateOne();
-            currT += deltaT; 
-        }
     }
 }
