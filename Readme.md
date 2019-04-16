@@ -22,12 +22,22 @@ Output File
 ===========
 Output file follows the following structure
 
-time<br/>
+time1<br/>
 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0<br/>
 GM_0 x_1 y_1 z_1 vx_1 vy_1 vz_1<br/>
 GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2
 
-and so on for the rest of the objects, repeating for each individual timestep, time is in seconds, rest same as in input file
+time2<br/>
+GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0<br/>
+GM_0 x_1 y_1 z_1 vx_1 vy_1 vz_1<br/>
+GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2
+
+time3<br/>
+GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0<br/>
+GM_0 x_1 y_1 z_1 vx_1 vy_1 vz_1<br/>
+GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2
+
+and so on for the rest of the objects and then timesteps, time is in seconds, rest same as in input file
  
 Command Line
 ============
@@ -56,12 +66,16 @@ mvn package
 java -jar GravitationalIntegrator
 ```
 
+Current Release Version
+=======================
+[Software requirements specification](https://github.com/MLumme/Ohjelmistotekniikka/releases/tag/Week5)
+
 Documentation
 =============
-[Software requirements specification](../master/Harjoitustyö/Documentation/requirements_specification.md)
+[Software requirements specification](../master/Harjoitustyï¿½/Documentation/requirements_specification.md)
 
-[Record of work hours](../master/Harjoitustyö/Documentation/record_of_work_hours.md)
+[Record of work hours](../master/Harjoitustyï¿½/Documentation/record_of_work_hours.md)
 
-[Architectural diagram and sequence charts](../master/Harjoitustyö/Documentation/architecture.md)
+[Architectural diagram and sequence charts](../master/Harjoitustyï¿½/Documentation/architecture.md)
 
 
