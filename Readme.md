@@ -22,9 +22,9 @@ Output File
 ===========
 Output file follows the following structure
 
-time
-GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0
-GM_0 x_1 y_1 z_1 vx_1 vy_1 vz_1
+time<br/>
+GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0<br/>
+GM_0 x_1 y_1 z_1 vx_1 vy_1 vz_1<br/>
 GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2
 
 and so on for the rest of the objects, repeating for each individual timestep, time is in seconds, rest same as in input file
