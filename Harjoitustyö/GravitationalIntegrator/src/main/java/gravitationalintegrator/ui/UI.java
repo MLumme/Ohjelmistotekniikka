@@ -37,7 +37,6 @@ import javafx.util.Callback;
 
 public class UI extends Application {
     IntegratorTask intTask;
-    Integrator leapfrog;
     Sys sys;
     TableView table;
     Menu menu;
@@ -75,6 +74,8 @@ public class UI extends Application {
                 try {
                     sys = FileHandler.readFromFile(file);
                     table.setItems(FXCollections.observableArrayList(sys.getBodies()));
+                    //reset steps to remove old timesteps
+                    steps = new ArrayList<>();
                 } catch (Exception err) {
                     errorDialogue(err.getMessage());
                 }    

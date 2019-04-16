@@ -6,7 +6,7 @@ If nothing has broken horribly when run, software should open a GUI, where one n
 
 If needed, one can save the simultaion by selectin Save Simulation from File-menu, see section Output File for structure. 
 
-Integration has been separated into its own thread from the ui, so while it is running GUI shoud remain responsive, althought it will block any changes to parameters, but the idea is to show that the program is still doing something and has not crashed. 
+Integration has been separated into its own thread from the ui, so while it is running GUI shoud remain responsive, althought it will block any changes to parameters, but the idea is to show that the program is still  and doing something and has not crashed. 
 
 Input File
 ==========
@@ -62,6 +62,6 @@ Documentation
 
 [Record of work hours](../master/Harjoitustyö/Documentation/record_of_work_hours.md)
 
-[Architectural diagram](../master/Harjoitustyö/Documentation/architecture.md)
+[Architectural diagram and sequence charts](../master/Harjoitustyö/Documentation/architecture.md)
 
 
