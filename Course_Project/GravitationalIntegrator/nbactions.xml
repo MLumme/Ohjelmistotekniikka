@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-Checkstyle</actionName>
+            <displayName>Checkstyle</displayName>
+            <goals>
+                <goal>jxr:jxr</goal>
+                <goal>checkstyle:checkstyle</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Testikattavuus</actionName>
+            <displayName>Testikattavuus</displayName>
+            <goals>
+                <goal>jacoco:report</goal>
+            </goals>
+        </action>
+        <action>
+            <actionName>CUSTOM-Jar</actionName>
+            <displayName>Jar</displayName>
+            <goals>
+                <goal>package</goal>
+            </goals>
+        </action>
+    </actions>

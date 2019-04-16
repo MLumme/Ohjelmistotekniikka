@@ -73,10 +73,10 @@ Current Release Version
 
 Documentation
 =============
-[Software requirements specification](../master/Harjoitusty�/Documentation/requirements_specification.md)
+[Software requirements specification](../master/Course_Project/Documentation/requirements_specification.md)
 
-[Record of work hours](../master/Harjoitusty�/Documentation/record_of_work_hours.md)
+[Record of work hours](../master/Course_Project/Documentation/record_of_work_hours.md)
 
-[Architectural diagram and sequence charts](../master/Harjoitusty�/Documentation/architecture.md)
+[Architectural diagram and sequence charts](../master/Course_Project/Documentation/architecture.md)
 
 
