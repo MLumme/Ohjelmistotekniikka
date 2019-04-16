@@ -25,17 +25,18 @@ Output file follows the following structure
 time1<br/>
 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0<br/>
 GM_0 x_1 y_1 z_1 vx_1 vy_1 vz_1<br/>
-GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2
-
+GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2<br/>
+...<br/>
 time2<br/>
 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0<br/>
 GM_0 x_1 y_1 z_1 vx_1 vy_1 vz_1<br/>
-GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2
-
+GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2<br/>
+...<br/>
 time3<br/>
 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0<br/>
 GM_0 x_1 y_1 z_1 vx_1 vy_1 vz_1<br/>
-GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2
+GM_2 x_2 y_2 z_2 vx_2 vy_2 vz_2<br/>
+...
 
 and so on for the rest of the objects and then timesteps, time is in seconds, rest same as in input file
  
