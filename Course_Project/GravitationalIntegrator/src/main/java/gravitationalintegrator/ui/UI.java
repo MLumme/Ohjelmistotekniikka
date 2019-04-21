@@ -74,6 +74,7 @@ public class UI extends Application {
                 try {
                     sys = FileHandler.readFromFile(file);
                     table.setItems(FXCollections.observableArrayList(sys.getBodies()));
+                    
                     //reset steps to remove old timesteps
                     steps = new ArrayList<>();
                 } catch (Exception err) {
@@ -144,14 +145,14 @@ public class UI extends Application {
                 //copies of sytem state on timesteps
                 intTask.setOnSucceeded(success -> {
                     try {
-                        //If steps list is null initialize it, else add latest 
-                        //integration result at the back of former results,
-                        //removing last element which would be a duplicate
-                        if (steps == null) {
-                            steps = new ArrayList<>();
-                        } else {
+                        //If steps list is empty add timesteps to it directly, 
+                        //else add latest integration result at the back of the
+                        //former results,removing last element which would be a 
+                        //duplicate
+                        if (steps.size() > 0) {
                             steps.remove(steps.size() - 1);
                         }
+                        
                         steps.addAll(intTask.get());
                         
                         //sys-object is always the last timestep
