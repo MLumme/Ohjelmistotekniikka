@@ -69,7 +69,7 @@ java -jar GravitationalIntegrator
 
 Current Release Version
 =======================
-[Current release](https://github.com/MLumme/Ohjelmistotekniikka/releases/tag/Week5)
+[Current release](https://github.com/MLumme/Ohjelmistotekniikka/releases/tag/Week5-Fix)
 
 Documentation
 =============
