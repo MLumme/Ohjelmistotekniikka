@@ -53,6 +53,22 @@ public class IntegratorTest {
         assertEquals(expected.toString(), acc.toString());        
     }
     
+    @Test
+    public void testAccelerationNoSingularity() {
+        Body body = sys.getBodies().get(1);   
+        
+        ArrayList<Body> singularityBodies = new ArrayList<>();
+        singularityBodies.add(body);
+        singularityBodies.add(body);
+        
+        Integrator singularityIntegrator = new Integrator(1.0, new Sys(singularityBodies));
+        
+        RealVector acc = singularityIntegrator.acceleration(body, 1);   
+        RealVector expected = new ArrayRealVector(new double[]{0.0, 0.0, 0.0});
+        
+        assertEquals(expected.toString(), acc.toString()); 
+    }
+    
     //Test that current time is correct after update
     @Test
     public void testUpdateOneUpdatesT() {

@@ -2,8 +2,8 @@
 package gravitationalintegrator.ui;
 
 import gravitationalintegrator.domain.Body;
-import gravitationalintegrator.domain.FileHandler;
-import gravitationalintegrator.domain.Integrator;
+import gravitationalintegrator.domain.IntegratorHandler;
+import gravitationalintegrator.io.FileHandler;
 import gravitationalintegrator.domain.IntegratorTask;
 import gravitationalintegrator.domain.Sys;
 
@@ -16,6 +16,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -34,25 +35,28 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
  
-
+/**
+ * Main UI class
+ */
 public class UI extends Application {
+    IntegratorHandler intHandler;
     IntegratorTask intTask;
-    Sys sys;
     TableView table;
     Menu menu;
     MenuBar menuBar;
     ArrayList<Sys> steps;
     Alert dialogue;
-    double totalT;
-    double deltaT;
 
     
     @Override
     public void init() {
-        totalT = 0.0;
-        deltaT = 0.0; 
+        intHandler = new IntegratorHandler();
     }
     
+    /**
+     * start-function to run as JavaFx-application
+     * @param stage stage to which application is rendered to
+     */
     @Override
     public void start(Stage stage) {
         dialogue = new Alert(AlertType.NONE);
@@ -63,7 +67,7 @@ public class UI extends Application {
         MenuItem loadNewData = new MenuItem("Load data");
         loadNewData.setOnAction((event) -> {
             //check if old integration is still running
-            if(intRunning()){
+            if (intRunning()) {
                 return;
             }
             
@@ -72,25 +76,19 @@ public class UI extends Application {
             
             if (file != null) {
                 try {
-                    sys = FileHandler.readFromFile(file);
-                    table.setItems(FXCollections.observableArrayList(sys.getBodies()));
-                    
-                    //reset steps to remove old timesteps
-                    steps = new ArrayList<>();
+                    intHandler.loadSys(file);
+                    table.setItems(FXCollections.observableArrayList(intHandler.getCurrBodies()));
                 } catch (Exception err) {
                     errorDialogue(err.getMessage());
                 }    
             }
         });
         
-        //ToDo
-        MenuItem loadOldSim = new MenuItem("Load simulation");
-        
-        //Menu item for saving and to open file explorer for selection of save target
-        MenuItem saveSim = new MenuItem("Save simulation");
-        saveSim.setOnAction((event) -> {
+        //Load steps for old integration from file
+        MenuItem loadOldData = new MenuItem("Load simulation");
+            loadOldData.setOnAction((event) -> {
             //check if old integration is still running
-            if(intRunning()){
+            if (intRunning()) {
                 return;
             }
             
@@ -99,15 +97,36 @@ public class UI extends Application {
             
             if (file != null) {
                 try {
-                    FileHandler.writeToFile(steps, file);
-                } catch (IOException err) {
+                    intHandler.loadSteps(file);
+                    table.setItems(FXCollections.observableArrayList(intHandler.getCurrBodies()));
+                } catch (Exception err) {
+                    errorDialogue(err.getMessage());
+                }    
+            }
+        });
+                
+        //Menu item for saving and to open file explorer for selection of save target
+        MenuItem saveSim = new MenuItem("Save simulation");
+        saveSim.setOnAction((event) -> {
+            //check if old integration is still running
+            if (intRunning()) {
+                return;
+            }
+            
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showOpenDialog(stage);
+            
+            if (file != null) {
+                try {
+                    intHandler.saveSteps(file);
+                } catch (Exception err) {
                     errorDialogue(err.getMessage());
                 }
             }            
         });
         
         menu.getItems().add(loadNewData);
-        menu.getItems().add(loadOldSim);
+        menu.getItems().add(loadOldData);
         menu.getItems().add(saveSim);
         
         menuBar = new MenuBar();
@@ -125,21 +144,19 @@ public class UI extends Application {
         Button run = new Button("Run");
         run.setOnAction((event) -> {
             //check if old integration is still running
-            if(intRunning()){
+            if (intRunning()) {
                 return;
             }
             
             //Check that simulation values are usable
-            if (sys == null) {
+            if (intHandler.isSysEmpty()) {
                 errorDialogue("No bodies to integrate");
-            } else if (totalT <= 0.0) {
-                errorDialogue("Unacceptabel total runtime value");
-            } else if (deltaT <= 0.0) {
-                errorDialogue("Unacceptable dT-value");
+            } else if (intHandler.areTimesOk()) {
+                errorDialogue("Unacceptable time values");
             //Continue to creating a Task for running the integration, without
             //freezing ui
-            } else {         
-                intTask = new IntegratorTask(totalT, deltaT, sys);
+            } else {
+                intTask = intHandler.buildTask();
                 
                 //On succes update values on GUI to final step, collect list of
                 //copies of sytem state on timesteps
@@ -149,14 +166,10 @@ public class UI extends Application {
                         //else add latest integration result at the back of the
                         //former results,removing last element which would be a 
                         //duplicate
-                        if (steps.size() > 0) {
-                            steps.remove(steps.size() - 1);
-                        }
-                        
-                        steps.addAll(intTask.get());
-                        
+                        intHandler.postInt();
+                       
                         //sys-object is always the last timestep
-                        table.setItems(FXCollections.observableArrayList(sys.getBodies()));
+                        table.setItems(FXCollections.observableArrayList(intHandler.getCurrBodies()));
                         
                         dialogue.setAlertType(AlertType.INFORMATION);
                         dialogue.setContentText("Integration completed");
@@ -182,40 +195,39 @@ public class UI extends Application {
         Label deltaTLabel = new Label("dT (s):");  
         
         TextField totalTField = new TextField();
-        totalTField.setText(Double.toString(totalT));
+        totalTField.setText(Double.toString(intHandler.getTotalT()));
         
         TextField deltaTField = new TextField();
-        deltaTField.setText(Double.toString(deltaT));
+        deltaTField.setText(Double.toString(intHandler.getDeltaT()));
         
         //button for submitting total runtime and timestep, shows error if 
         //unable to parse as double, or value not usable
         Button submit = new Button("Submit");
         submit.setOnAction((event) -> {
-            if(intRunning()){
+            if (intRunning()) {
                 return;
             }
             
-            try{
+            try {
                 double tempT = Double.parseDouble(totalTField.getText());
                
-                if(tempT <= 0.0){
+                if (tempT <= 0.0) {
                     errorDialogue("T-value must be greater than 0");
-                }else{
-                    try{
+                } else {
+                    try {
                         double tempDT = Double.parseDouble(deltaTField.getText());
                         
-                        if(tempDT <= 0.0){
+                        if (tempDT <= 0.0) {
                             errorDialogue("T-value must be greater than 0");
-                        }else{
-                            totalT = tempT;
-                            deltaT = tempDT;
+                        } else {
+                            intHandler.setTs(tempT, tempDT);
                         }  
                         
-                    }catch (NumberFormatException err) {
+                    } catch (NumberFormatException err) {
                         errorDialogue("Unable to parse dT-value as double");
                     }                    
                 }
-            }catch (NumberFormatException err) {
+            } catch (NumberFormatException err) {
                 errorDialogue("Unable to parse T-value as double");
             }
         
@@ -231,17 +243,23 @@ public class UI extends Application {
         stage.show();
     }
     
-    //Error dialogue
+    /**
+     * Function shows JavaFx-Dialogue of the Error-type
+     * @param msg string containing the message to show
+     */
     private void errorDialogue(String msg) {
         dialogue.setAlertType(AlertType.ERROR);
         dialogue.setContentText(msg);
         dialogue.show();     
     }
     
-    //Checks if Task intTask exosts and is running, for disabling users abilty to
-    //change anything and potentially causing unvanted behaviour  
+    /**
+     * Checks if Task intTask exists and is running, for disabling users ability to
+     * change anything and potentially causing unexpected behaviour  
+     * @return Boolean telling if task running or not
+     */
     private boolean intRunning() {
-        if(intTask != null && intTask.isRunning()){
+        if (intTask != null && intTask.isRunning()) {
             errorDialogue("Last integration still running");
             return true;
         }
@@ -249,7 +267,9 @@ public class UI extends Application {
         return false;
     }
     
-    //Utility for building the table with body parameter.
+    /**
+     *Utility for building the table for gravitational systems bodies parameters. 
+     */
     private void tableBuilder() {
         table = new TableView();
         

@@ -1,12 +1,14 @@
 Current status
 ==============
-If nothing has broken horribly when run, software should open a GUI, where one needs to load in datafile by using Load Data from File-menu in top bar.
+**Due to decision to modify the structure of the program in the last minute the file describing its architecture is not up to date to the actual current structure, nor close to what is expected for this weeks review.**
 
- Additionally total time of simulation and timestep (dT) must be inserted into the bottom bar and submitted by pressing the sublit button, after which integration can be run by pressing the imaginatively named run-button. after the integration is finished table should update to show the resulting parameters for bodies after integration.
+If nothing has broken horribly when run, software should open a GUI, where one needs to load in datafile by using "Load Data" from File-menu in top bar. Or if old integration exists, it can be loaded to continue its integration by selecting "Load Simulation" from the menu.
 
-If needed, one can save the simultaion by selectin Save Simulation from File-menu, see section Output File for structure. 
+Additionally total time of simulation and timestep (dT) must be inserted into the bottom bar and submitted by pressing the submit button, after which integration can be run by pressing the imaginatively named run-button. after the integration is finished table should update to show the resulting parameters for bodies after integration.
 
-Integration has been separated into its own thread from the ui, so while it is running GUI shoud remain responsive, althought it will block any changes to parameters, but the idea is to show that the program is still  and doing something and has not crashed. 
+If needed, one can save the integration by selecting Save Simulation from File-menu, see section Output File for structure.
+
+Integration has been separated into its own thread from the ui, so while it is running GUI shoud remain responsive, althought it will block any changes to parameters, but the idea is to show that the program is still  and doing something and has not crashed.
 
 Input File
 ==========
@@ -69,14 +71,14 @@ java -jar GravitationalIntegrator
 
 Current Release Version
 =======================
-[Current release](https://github.com/MLumme/Ohjelmistotekniikka/releases/tag/Week5)
+[Current release](https://github.com/MLumme/Ohjelmistotekniikka/releases/tag/Week6)
 
 Documentation
 =============
 [Software requirements specification](../master/Course_Project/Documentation/requirements_specification.md)
 
+[User manual](../master/Course_Project/Documentation/manual.md)
+
 [Record of work hours](../master/Course_Project/Documentation/record_of_work_hours.md)
 
 [Architectural diagram and sequence charts](../master/Course_Project/Documentation/architecture.md)
-
-

@@ -11,6 +11,7 @@ Date | Time | Task
 15.4 | 4   | Wrote tests for Sys-class, fixed an embarrasing error which tests made apparent where computation of system center of mass was not calculated properly. Found and fixed errors and typos in IntegratorTest, which had coincidentally masked a fault in acceleration calculation of gravity was repelling bodies, due to forgotten nagative sign, which should now work correctly. 
 16.4 | 3   | Worked on error handling and communicating them to user via Alert-dialogues, tried to break UI-class into smaller chucks (WIP). Implemented a small addition where any changes to parameters or attempts to save or load files are stopped while integrator thread is still running, and this communicated to user. Required tasks for GitHub-release.
 20.4 | 4   | Attempted to create plots using javaFX-linecharts, worked, deemed too slow, scrapped, will attempt to find more suitable alternative. Fixed error in gitignore which allowed target-files to repository. Fixed an error where arraylist steps was cleared in wrong way during file input.
-
-Total time: 32h
+25.4 | 3.5 | Added functionality to load old integration timestep-lists from file, witch unfortunately required a rewrite, refactored some of error handling and parsing file into Body-objet into their own functions to remove duplicate code.
+26.4 | 7   | Converted pre-method and -class commets to javadoc-format, including private methods for the sake of consistency, added an additional class to domain that acts as a sort of interface between UI and the classes in domain and io-packages, no resulting only in integratorTask being partially operated from UI, rest of parameters and methods are stored in and operated through IntegratorHandler. Built a kludge of a test pair for IntegratorTask-class for testing that thread system works. Wrote initial version of user manual.
+Total time: 42.5h
 

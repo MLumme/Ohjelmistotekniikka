@@ -5,15 +5,30 @@ import java.util.ArrayList;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
 
+/**
+ * Class containing integrator using leapfrog-algorithm
+ * @author Markus
+ */
 public class Integrator {
     double deltaT;
     Sys sys;
     
+    /**
+     * Constructor for Integrator class
+     * @param deltaT Timestep used in integrator
+     * @param sys System that will be integrated
+     */
     public Integrator(double deltaT, Sys sys) {
         this.deltaT = deltaT;
         this.sys = sys;
     }
     
+    /**
+     * Computes acceleration caused on body by the rest of systems objects 
+     * @param body Body being effected by system
+     * @param i Index of body to avoid self-effects
+     * @return Acceleration effecting body 
+     */
     public RealVector acceleration(Body body, int i) {
         RealVector acc = new ArrayRealVector(new double[]{0, 0, 0});
         ArrayList<Body> bodies = sys.getBodies();
@@ -26,15 +41,22 @@ public class Integrator {
             Body effector = bodies.get(j);
             
             RealVector distVec = body.getLoc().subtract(effector.getLoc());
-
-            acc = acc.subtract(distVec.unitVector()
-                    .mapMultiply(effector.getGm())
-                    .mapDivide(Math.pow(distVec.getNorm(), 2.0)));
+            
+            //if distance of objects is zero then consider force zero to avoid 
+            //singularity in division 
+            if (distVec.getNorm() != 0) {
+                acc = acc.subtract(distVec.unitVector()
+                        .mapMultiply(effector.getGm())
+                        .mapDivide(Math.pow(distVec.getNorm(), 2.0)));
+            }
         }
         
         return acc;
     }
     
+    /**
+     * Integrate one timestep forward updating sys to new locations and velocities
+     */
     public void updateOne() {
         ArrayList<Body> bodies = sys.getBodies();
         ArrayList<Body> newBodies = new ArrayList<>();
