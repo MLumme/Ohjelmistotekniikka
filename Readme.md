@@ -1,6 +1,6 @@
 Current status
 ==============
-**Due to decision to modify the structure of the program in the last minute the file describing its architecture is not up to date to the actual current structure, nor close to what is expected for this weeks review.**
+**Due to decision to modify the structure of the program in the last minute, the file describing its architecture is not up to date to the actual current structure, nor close to what is expected for this weeks review.**
 
 If nothing has broken horribly when run, software should open a GUI, where one needs to load in datafile by using "Load Data" from File-menu in top bar. Or if old integration exists, it can be loaded to continue its integration by selecting "Load Simulation" from the menu.
 
