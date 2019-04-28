@@ -116,6 +116,8 @@ public class FileHandler {
                 throw errorThrower(2, lineCounter, 0, 0);
             }    
             
+            lineCounter++;
+            
             ArrayList<Sys> steps = new ArrayList<>();
                         
             double time = 0.0;
