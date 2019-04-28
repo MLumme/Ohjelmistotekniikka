@@ -105,10 +105,13 @@ public final class Sys {
      */
     @Override
     public String toString() {
-        String output = this.currentT + "\n";
+        String output = this.currentT + " ";
+        
         for (Body body: this.bodies) {
-            output += body.toString() + "\n";
+            output += body.toString() + " ";
         }
+        
+        output += "\n";
         
         return output;
     }

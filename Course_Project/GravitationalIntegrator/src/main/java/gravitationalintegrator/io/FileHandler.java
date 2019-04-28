@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Scanner;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
@@ -129,56 +130,40 @@ public class FileHandler {
                 line = fileReader.nextLine();
                 inputLine = line.split(" ");
                 
-                if (inputLine.length != 1) {
-                    throw errorThrower(1, lineCounter, 1, inputLine.length);            
+                //Test that row has correct number of parameters
+                if (inputLine.length != 7*nBodies + 1) {
+                    throw errorThrower(1, lineCounter, 7*nBodies + 1, inputLine.length); 
                 }
                 
+                //Try to parse first column (time) as dounle
                 try {
                     time = Double.parseDouble(inputLine[0]);
-                    lineCounter++;
                 } catch (NumberFormatException err) {
                     fileReader.close();
                     throw errorThrower(2, lineCounter, 0, 0);                
                 }
                 
-                lineCounter++;
-                
                 ArrayList<Body> bodies = new ArrayList<>();
                 
-                //loop over and load bodies
+                //try to read rest of columns as body parameters 
                 for (int j = 0; j < nBodies; j++) {
-                    //throw error if file ends before all bodies in
-                    if (!fileReader.hasNextLine()) {
-                        fileReader.close();
-                        throw errorThrower(1, 0, 0, 0);
-                    }
-
-                    line = fileReader.nextLine();
-                    inputLine = line.split(" ");
-
-                    //if incorrect number of parameters throw error
-                    if (inputLine.length != 7) {
-                        fileReader.close();
-                        throw errorThrower(1, lineCounter, 7, inputLine.length);
-                    }
-                    
-                    //try to parse inputs from file as double precision values 
                     try {
-                        Body body = bodyParser(inputLine);
+                        Body body = bodyParser(Arrays.copyOfRange(inputLine, 1 + 7 * j, 7 * (1 + j)));
                         bodies.add(body);
-
-                        lineCounter++;
-
                     } catch (NumberFormatException err) {
                         fileReader.close();
                         throw errorThrower(2, lineCounter, 0, 0);
-                    }                    
-                } 
-             
+                    } 
+                }
+       
+                //initialize new system state, set its time to one read form file,
+                //add to steps
                 Sys sys = new Sys(bodies);
                 sys.setT(time);
                 
-                steps.add(sys);                               
+                steps.add(sys);    
+                
+                lineCounter++;
             }
                   
             fileReader.close();
