@@ -17,10 +17,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- *
- * @author Markus
- */
 public class IntegratorTaskTest {
     IntegratorTask intTask;
     JFXPanel panel;

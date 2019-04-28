@@ -3,12 +3,10 @@ package gravitationalintegrator.ui;
 
 import gravitationalintegrator.domain.Body;
 import gravitationalintegrator.domain.IntegratorHandler;
-import gravitationalintegrator.io.FileHandler;
 import gravitationalintegrator.domain.IntegratorTask;
 import gravitationalintegrator.domain.Sys;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import javafx.application.Application;
@@ -16,7 +14,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

@@ -254,7 +254,7 @@ public class FileHandler {
         switch (type) {
             case 1:
                 return new Exception("Wrong number of parameters, error in line " 
-                        + lineCounter + ", expected " + expectedCount + " parameters, was " + paramCount);
+                        + lineCounter + ", expected " + expectedCount + " parameters, found " + paramCount);
             case 2:
                 return new Exception("Unable to parse to correct number format, "
                         + "error in line " + lineCounter);
