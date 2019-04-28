@@ -117,7 +117,7 @@ public class FileHandler {
             }    
             
             ArrayList<Sys> steps = new ArrayList<>();
-
+                        
             double time = 0.0;
             
             for (int i = 0; i < nSteps; i++) {
@@ -142,13 +142,13 @@ public class FileHandler {
                     fileReader.close();
                     throw errorThrower(2, lineCounter, 0, 0);                
                 }
-                
+                                
                 ArrayList<Body> bodies = new ArrayList<>();
                 
                 //try to read rest of columns as body parameters 
                 for (int j = 0; j < nBodies; j++) {
                     try {
-                        Body body = bodyParser(Arrays.copyOfRange(inputLine, 1 + 7 * j, 7 * (1 + j)));
+                        Body body = bodyParser(Arrays.copyOfRange(inputLine, 1 + 7 * j, 8 * (1 + j)));
                         bodies.add(body);
                     } catch (NumberFormatException err) {
                         fileReader.close();
@@ -165,7 +165,7 @@ public class FileHandler {
                 
                 lineCounter++;
             }
-                  
+            
             fileReader.close();
             return steps;
             
@@ -205,7 +205,7 @@ public class FileHandler {
      * Body-object from them
      * @param inputLine String-array with parameters for body-constructor
      * @return New Body-object
-     * @throws Exception if input cant be converted to double-precision folats 
+     * @throws Exception if input cant be converted to double-precision floats 
      */
     private static Body bodyParser(String[] inputLine) throws Exception {
         try {          
