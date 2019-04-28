@@ -13,5 +13,5 @@ Date | Time | Task
 20.4 | 4   | Attempted to create plots using javaFX-linecharts, worked, deemed too slow, scrapped, will attempt to find more suitable alternative. Fixed error in gitignore which allowed target-files to repository. Fixed an error where arraylist steps was cleared in wrong way during file input.
 25.4 | 3.5 | Added functionality to load old integration timestep-lists from file, witch unfortunately required a rewrite, refactored some of error handling and parsing file into Body-objet into their own functions to remove duplicate code.
 26.4 | 7   | Converted pre-method and -class commets to javadoc-format, including private methods for the sake of consistency, added an additional class to domain that acts as a sort of interface between UI and the classes in domain and io-packages, no resulting only in integratorTask being partially operated from UI, rest of parameters and methods are stored in and operated through IntegratorHandler. Built a kludge of a test pair for IntegratorTask-class for testing that thread system works. Wrote initial version of user manual.
-Total time: 42.5h
-
+28.4 | ~1  | Changed output format to be simpler to manipulate in code by placing all system parameters on same row per timestep.
+Total time: 43.5h
