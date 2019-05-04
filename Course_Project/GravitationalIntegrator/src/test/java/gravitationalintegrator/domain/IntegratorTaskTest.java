@@ -13,13 +13,15 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.junit.After;
+import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class IntegratorTaskTest {
     IntegratorTask intTask;
-    JFXPanel panel;
+     static JFXPanel panel;
     Sys sys;
     Sys sys2;
     
@@ -39,13 +41,17 @@ public class IntegratorTaskTest {
         sys = new Sys(bodies);
         sys2 = new Sys(bodies);
         
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
         //together with tearDown() a horrible kludge from the depths of 
         //Stackowerflow to enable testing of JavaFX threads 
-        panel = new JFXPanel();
-    }  
+        panel = new JFXPanel();        
+    }
     
-    @After
-    public void tearDown() {
+    @AfterClass
+    public static void tearDownClass() {
         Platform.exit();
     }
     

@@ -8,7 +8,9 @@ Domain
 ------
 In the domain the difference between integration and unit testing is somewhat unclear sometimes, due to how much classes are interconnected.
 
-What could be called the integration tests for main function of the program, integration of orbits, is in IntegratorHandlerTest. It, among its own unit tests, test the entire chain of calls from UI to set up, start and handle results post-completion twice, for both correctness of results when compared to just running the integrator alone, and to check that returned array contains right amount of steps for given integration times. 
+What could be called the integration tests for main function of the program, integration of orbits, is in IntegratorHandlerTest. It, among its own unit tests, test the entire chain of calls from UI to set up, start and handle results post-completion twice, for both correctness of results when compared to just running the integrator alone, and to check that returned array contains right amount of steps for given integration times.
+
+According to review of Week 6:s returned code there appears to be a potential error resulting from a trick to get JavaFX toolkit to run in JUnit-testing, which I'm unable to reproduce. The method is to initialize a JFXPanel an @Before method, and running Platform.exit() in @After, according to searching error might be caused by calls being repeated  for each test. Attempted to fix this by doing initialization and exit in @BeforeClass and @AfterClass, resulting to only one event each, but due to my inability to reproduce the problem I am unsure if problem persists. Hence IntegratorTaskTest and IntegratorHandlerTest might be rendered unusable.
 
 File Input/Output
 -----------------

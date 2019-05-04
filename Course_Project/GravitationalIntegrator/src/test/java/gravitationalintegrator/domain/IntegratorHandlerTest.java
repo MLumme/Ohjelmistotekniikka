@@ -8,10 +8,11 @@ import java.util.concurrent.TimeoutException;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.apache.commons.math3.linear.ArrayRealVector;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 public class IntegratorHandlerTest {
     IntegratorHandler intHandler; 
@@ -19,7 +20,7 @@ public class IntegratorHandlerTest {
     Body body1;
     Body body2;
     Sys sys;
-    JFXPanel panel;
+    static JFXPanel panel;
     
     @Before
     public void setUp() {
@@ -37,14 +38,17 @@ public class IntegratorHandlerTest {
         sys.setT(1.0);
         
         intHandler.setSys(sys);
-        
-        //together with tearDown() a horrible kludge from the depths of
-        //Stackowerflow to enable testing of JavaFX threads
-        panel = new JFXPanel();
     }
     
-    @After
-    public void tearDown() {
+    @BeforeClass
+    public static void setUpClass() {
+        //together with tearDown() a horrible kludge from the depths of 
+        //Stackowerflow to enable testing of JavaFX threads 
+        panel = new JFXPanel();        
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
         Platform.exit();
     }
     
