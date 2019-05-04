@@ -83,6 +83,6 @@ Documentation
 
 [Record of work hours](../master/Course_Project/Documentation/record_of_work_hours.md)
 
-[Architectural diagram and sequence charts](../master/Course_Project/Documentation/architecture.md)
+[Architectural document](../master/Course_Project/Documentation/architecture.md)
 
 [Testing document](../master/Course_Project/Documentation/testing.md)
