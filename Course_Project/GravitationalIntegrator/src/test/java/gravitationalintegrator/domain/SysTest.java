@@ -31,7 +31,7 @@ public class SysTest {
     //Test toString and coincidentaly constructor
     @Test
     public void testToString() {
-        String expected = "0.0\n1.6 0.75 0.5 1.0 0.01 0.05 0.1\n1.6 0.75 -0.5 -1.0 0.01 0.05 0.1\n";
+        String expected = "0.0 1.6 0.75 0.5 1.0 0.01 0.05 0.1 1.6 0.75 -0.5 -1.0 0.01 0.05 0.1 \n";
         
         assertEquals(expected, sys.toString());
     }
@@ -74,7 +74,7 @@ public class SysTest {
         
         sys.setBodies(bodies);
         
-        String expected = "0.0\n1.6 0.0 0.0 0.0 0.0 0.0 0.0\n1.6 0.75 -0.5 -1.0 0.01 0.05 0.1\n";
+        String expected = "0.0 1.6 0.0 0.0 0.0 0.0 0.0 0.0 1.6 0.75 -0.5 -1.0 0.01 0.05 0.1 \n";
         
         assertEquals(expected, sys.toString());
     }  

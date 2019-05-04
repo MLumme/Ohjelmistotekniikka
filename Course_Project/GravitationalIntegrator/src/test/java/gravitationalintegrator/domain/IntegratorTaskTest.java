@@ -52,7 +52,6 @@ public class IntegratorTaskTest {
     //Test that resulting array is of correct size
     @Test
     public void testIntegratorTaskSize() throws InterruptedException, ExecutionException, TimeoutException {    
-        //goes further than above on purpose
         intTask = new IntegratorTask(10.0, 1.0, sys);
         
         Thread intThread = new Thread(intTask);
@@ -60,13 +59,13 @@ public class IntegratorTaskTest {
         intThread.start();
 
         
-        sys = intTask.get(100, TimeUnit.MILLISECONDS).get(5);
+        ArrayList<Sys> steps = intTask.get(100, TimeUnit.MILLISECONDS);
 
-        assertEquals(11, intTask.get().size());
+        assertEquals(11, steps.size());
     }    
     
     //Test that integratorTask gives same result as running Integrator 
-    //outside of it
+    //alone
     @Test
     public void testIntegratorTaskResult() throws InterruptedException, ExecutionException, TimeoutException {
 
@@ -87,6 +86,5 @@ public class IntegratorTaskTest {
         sys = intTask.get(100, TimeUnit.MILLISECONDS).get(5);
         
         assertEquals(sys2.toString(),sys.toString());
-        assertEquals(11, intTask.get().size());
     }
 }

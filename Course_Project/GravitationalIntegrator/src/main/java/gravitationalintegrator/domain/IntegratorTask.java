@@ -9,6 +9,7 @@ import javafx.concurrent.Task;
  * integration on system until maximum time is reached
  */
 public class IntegratorTask extends Task<ArrayList<Sys>> {
+    private Integrator leapfrog;
     private final double totalT;
     private final double deltaT;
     private final Sys sys;
@@ -36,7 +37,7 @@ public class IntegratorTask extends Task<ArrayList<Sys>> {
         double contT = curT + totalT;
         ArrayList<Sys> steps = new ArrayList<>();
         
-        Integrator leapfrog = new Integrator(deltaT, sys);
+        leapfrog = new Integrator(deltaT, sys);
         
         steps.add(new Sys(sys));
         

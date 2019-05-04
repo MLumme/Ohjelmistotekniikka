@@ -1,0 +1,147 @@
+Loading inital parameters
+
+ui->+*fileChooser: new FileChooser()
+note right of fileChooser: User selects input file
+fileChooser-->-ui: File file
+destroy fileChooser
+alt If file null
+note right of ui: Do nothing
+else Else
+ui->+intHandler: loadSys(file)
+intHandler->+*FileHandler: .readFromFile(file)
+alt If method .readFromFile runs into errors
+FileHandler-->intHandler: Exception
+intHandler-->ui: Exception
+ui->ui: show error message
+else Else
+FileHandler-->-intHandler: Sys sys
+destroy FileHandler
+ui->intHandler: getCurrBodies()
+intHandler-->-ui:ArrayList<Body> bodies
+ui->ui: update parameter table
+end
+end
+
+Loading steps
+
+ui->+*fileChooser: new FileChooser()
+note right of fileChooser: User selects input file
+fileChooser-->-ui: File file
+destroy fileChooser
+alt If file null
+note right of ui: Do nothing
+else Else
+ui->+intHandler: loadSteps(file)
+intHandler->+*FileHandler: .readStepsFromFile(file)
+alt If method .readStepsFromFile runs into errors
+FileHandler-->intHandler: Exception
+intHandler-->ui: Exception
+ui->ui: show error message
+else Else
+FileHandler-->-intHandler: ArrayList<Sys> steps
+note right of intHandler: 
+    update last memeber of steps
+    to be current sys-object
+end note
+destroy FileHandler
+ui->intHandler: getCurrBodies()
+intHandler-->-ui:ArrayList<Body> bodies
+ui->ui: update parameter table
+end
+end
+
+Saving steps
+
+ui->+*fileChooser: new FileChooser()
+note right of fileChooser: 
+    User selects or creates 
+    output file
+end note
+fileChooser-->-ui: File file
+destroy fileChooser
+alt If file null
+note right of ui: Do nothing
+else Else
+ui->+intHandler: saveSteps(file)
+intHandler->+*FileHandler: .writeStepsToFile(file)
+alt If method .writeStepsToFile runs into errors
+FileHandler-->intHandler: Exception
+intHandler-->ui: Exception
+ui->ui: show error message
+else Else
+destroy FileHandler
+deactivate intHandler
+end
+end
+
+Integration sequence
+
+ui->+intHandler: isSysEmpty()
+note right of intHandler:
+    checks if object sys is 
+    either null or has empty 
+    list of bodieas
+end note
+intHandler-->-ui: bool
+ui->+intHandler: areTimesOk()
+note right of intHandler:
+    checks if integration 
+    timevalues are usable
+end note
+intHandler-->-ui: bool
+alt if either condition unacceptable
+ui->ui: show error message
+else Else
+ui->+intHandler: buidTask()
+intHandler->*intTask: new IntegratorTask(totalT, deltaT, sys)
+intHandler->-ui: intTaskt
+note right of ui: 
+    set up events happening 
+    on intTasks onCompletion-
+    event, tie intTask to a 
+    ProgressBar
+end note
+ui->+intHandler: startInt()
+intHandler->*intThread: new Thread(intTask)
+intHandler->intThread: setDaemon(True)
+intHandler->+intThread: run()
+deactivate intHandler
+note right of ui:
+    integration process
+    runs separately in its
+    own thread until
+    successfull completion
+    or exception
+end note
+intThread->+intTask: call()
+intTask->*leapfrog: new Integrator(deltaT, sys)
+activate leapfrog
+loop until totalT passed
+    intTask->leapfrog: updateOne()
+end
+deactivate intTask
+destroy leapfrog
+destroy intThread
+alt if Thread has produced an Exception
+ui->ui: show error message
+else If integration was completed successfully
+ui->+intHandler: postInt()
+intHandler->+intTask: get()
+intTask-->-intHandler: ArrayList<Sys>
+destroy intTask
+note right of intHandler:
+    add list to the old of
+    old steps-list, removing
+    last element of old as it 
+    is a duplicate of intTasks
+    outputlists first element
+end note
+deactivate intHandler
+ui->+intHandler: getCurrBodies()
+intHandler-->-ui: ArrayList<Body> 
+note right of ui: 
+    replace body parameters
+    in ui table with new ones
+end note
+end 
+end

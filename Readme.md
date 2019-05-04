@@ -1,22 +1,14 @@
-Current status
-==============
-**Due to decision to modify the structure of the program in the last minute, the file describing its architecture is not up to date to the actual current structure, nor close to what is expected for this weeks review.**
-
-If nothing has broken horribly when run, software should open a GUI, where one needs to load in datafile by using "Load Data" from File-menu in top bar. Or if old integration exists, it can be loaded to continue its integration by selecting "Load Simulation" from the menu.
-
-Additionally total time of simulation and timestep (dT) must be inserted into the bottom bar and submitted by pressing the submit button, after which integration can be run by pressing the imaginatively named run-button. after the integration is finished table should update to show the resulting parameters for bodies after integration.
-
-If needed, one can save the integration by selecting Save Simulation from File-menu, see section Output File for structure.
-
-Integration has been separated into its own thread from the ui, so while it is running GUI shoud remain responsive, althought it will block any changes to parameters, but the idea is to show that the program is still  and doing something and has not crashed.
+Program function
+================
+This programs function is to integrate orbital motion for a set of objects using leapfrog-algorithm, and provide the user with possibility to continue formerly run integrations by loading old output files.
 
 Input File
 ==========
-Input rows should be as follows:
+Input rows shall be as follows:
 
 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0
  
-Here GM is the standard gravitational parameter in km^3/s^2, x,y,z:s are the components of the bodys location vector in km, and vx,vy,vz:are the components of velocity vector in km/s.
+Here GM is the standard gravitational parameter in km^3/s^2, x,y,z:s are the components of the body’s location vector in km, and vx,vy,vz:are the components of velocity vector in km/s.
 
 Currently, there is an file for testing, Test_Input.dat, with parameters for Sun and the four gas giants in folder GravitationalIntegrator for running the program.
 
@@ -25,43 +17,63 @@ Output File
 Output file follows the following structure
 
 nSteps nBodies<br>
-time1 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0 GM_1 x_1 y_1 z_1 vx_1 vy_1 vz_1 ...<br>
-time2 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0 GM_1 x_1 y_1 z_1 vx_1 vy_1 vz_1 ...<br>
-time3 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0 GM_1 x_1 y_1 z_1 vx_1 vy_1 vz_1 ...<br>
+T1 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0 GM_1 x_1 y_1 z_1 vx_1 vy_1 vz_1 ...<br>
+T2 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0 GM_1 x_1 y_1 z_1 vx_1 vy_1 vz_1 ...<br>
+T3 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0 GM_1 x_1 y_1 z_1 vx_1 vy_1 vz_1 ...<br>
 ...
 
 and so on for the rest of the objects and timesteps, time is in seconds, rest same as in input file. nSteps is the number of timesteps stored in file, and nBodies is the number of simulated objects. timeX is the simulation time at current timestep, and the rest are the gravitational parameters and phase-space coordinates for the objects.
  
 Command Line
 ============
+
+Testing, test coverage and checkstyle
+-------------------------------------
+
 Tests can be run with: 
 ```
 mvn test
 ```
-
-Checkstyle can be run with
+Checkstyle, which ignores contents of ui-package, can be run with
 ```
 mvn jxr:jxr checkstyle:checkstyle
 ```
+with report being generated in ``target/site/checkstyle.html``
 
-Test coverage with jacoco can be run with
+Test coverage, which also ignores contents of ui-package, with jacoco can be run with
 ```
 mvn jacoco:report
 ```
+with report being generated in folder ``target/site/jacoco/index.html``
+
+JavaDoc
+-------
+JavaDoc can be run with
+```
+mvn jacoco:report
+```
+with report being generated in folder ``target/site/apidocs/index.html``
+
+Packaging
+---------
 
 Packaging can be run with 
 ```
 mvn package
 ```
+producing a ``.jar`` in in the ``target/``-folder with the name of ``GravitationalIntegrator-1.0-SNAPSHOT.jar``
 
-.jar can be run with
+Running
+-------
+
+``.jar`` can be run with
 ```
 java -jar GravitationalIntegrator
 ```
 
 Current Release Version
 =======================
-[Current release](https://github.com/MLumme/Ohjelmistotekniikka/releases/tag/Week6)
+[Current release](https://github.com/MLumme/Ohjelmistotekniikka/releases/tag/loppupalautus)
 
 Documentation
 =============
@@ -72,3 +84,5 @@ Documentation
 [Record of work hours](../master/Course_Project/Documentation/record_of_work_hours.md)
 
 [Architectural diagram and sequence charts](../master/Course_Project/Documentation/architecture.md)
+
+[Testing document](../master/Course_Project/Documentation/testing.md)

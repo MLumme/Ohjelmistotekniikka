@@ -10,8 +10,8 @@ import org.apache.commons.math3.linear.RealVector;
  * @author Markus
  */
 public class Integrator {
-    double deltaT;
-    Sys sys;
+    private double deltaT;
+    private Sys sys;
     
     /**
      * Constructor for Integrator class

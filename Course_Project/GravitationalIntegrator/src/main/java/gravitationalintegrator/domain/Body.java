@@ -6,9 +6,9 @@ import org.apache.commons.math3.linear.RealVector;
  * Object for gravitational body
  */
 public class Body {
-    final double gm;
-    RealVector loc;
-    RealVector vel;
+    private final double gm;
+    private RealVector loc;
+    private RealVector vel;
 
     /**
      * @param gm The gravitational parameter

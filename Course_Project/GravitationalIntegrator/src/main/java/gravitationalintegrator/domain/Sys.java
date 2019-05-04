@@ -10,9 +10,9 @@ import org.apache.commons.math3.linear.RealVector;
  * continously updating state, and copied to keep record of system state during the integration
  */
 public final class Sys {
-    double currentT;
-    RealVector com;
-    ArrayList<Body> bodies;
+    private double currentT;
+    private RealVector com;
+    private ArrayList<Body> bodies;
 
     /**
      * Constructor building a new Sys-instance from a array of bodies, which initialises 

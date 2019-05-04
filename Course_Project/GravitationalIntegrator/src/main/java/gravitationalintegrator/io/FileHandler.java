@@ -50,18 +50,8 @@ public class FileHandler {
                 
                 //try to parse inputs from file as double precision values 
                 try {
-                    RealVector loc = new ArrayRealVector(
-                            new double[]{Double.parseDouble(inputLine[1]),
-                                Double.parseDouble(inputLine[2]),
-                                Double.parseDouble(inputLine[3])});
-                    
-                    RealVector vel = new ArrayRealVector(
-                            new double[]{Double.parseDouble(inputLine[4]),
-                                Double.parseDouble(inputLine[5]),
-                                Double.parseDouble(inputLine[6])});   
-                    
-                    body = new Body(Double.parseDouble(inputLine[0]), loc, vel);
-                
+                    body = bodyParser(inputLine);
+
                 //catch errors in parsing strings to doubles
                 } catch (Exception err) {
                     throw errorThrower(2, lineCounter, 0, 0);
@@ -69,6 +59,10 @@ public class FileHandler {
                 
                 bodies.add(body);
                 lineCounter++;
+            }
+            
+            if (bodies.size() < 2) {
+                throw errorThrower(4, 0, 0, 0);
             }
             
             fileReader.close();
@@ -87,7 +81,7 @@ public class FileHandler {
      * @throws Exception in case of any of several different parsing-, 
      * file structure- or IO-error-handlers are tripped
      */
-    public static ArrayList<Sys> readIntFromFile(File inFile) throws Exception {        
+    public static ArrayList<Sys> readStepsFromFile(File inFile) throws Exception {        
         try {
             Scanner fileReader = new Scanner(inFile);
             
@@ -116,6 +110,13 @@ public class FileHandler {
                 throw errorThrower(2, lineCounter, 0, 0);
             }    
             
+            //Check that numbers of timesteps and bodies are acceptable
+            if (nSteps < 1) {
+                throw new Exception("File must contain 1 or more timesteps");
+            } else if (nBodies < 2) {
+                throw errorThrower(4, 0, 0, 0);
+            }
+            
             lineCounter++;
             
             ArrayList<Sys> steps = new ArrayList<>();
@@ -126,18 +127,18 @@ public class FileHandler {
                 //throw error if file ends before all bodies in
                 if (!fileReader.hasNextLine()) {
                     fileReader.close();
-                    throw errorThrower(1, 0, 0, 0);
+                    throw errorThrower(3, 0, 0, 0);
                 }
                 
                 line = fileReader.nextLine();
                 inputLine = line.split(" ");
                 
                 //Test that row has correct number of parameters
-                if (inputLine.length != 7*nBodies + 1) {
-                    throw errorThrower(1, lineCounter, 7*nBodies + 1, inputLine.length); 
+                if (inputLine.length != 7 * nBodies + 1) {
+                    throw errorThrower(1, lineCounter, 7 * nBodies + 1, inputLine.length); 
                 }
                 
-                //Try to parse first column (time) as dounle
+                //Try to parse first column (time) as double
                 try {
                     time = Double.parseDouble(inputLine[0]);
                 } catch (NumberFormatException err) {
@@ -182,7 +183,7 @@ public class FileHandler {
      * @param outFile File for output
      * @throws IOException exception if file cannot be opened or written in
      */
-    public static void writeIntToFile(ArrayList<Sys> steps, File outFile) throws IOException {
+    public static void writeStepsToFile(ArrayList<Sys> steps, File outFile) throws IOException {
         try {
             FileWriter writer = new FileWriter(outFile, false);
             PrintWriter printer = new PrintWriter(writer);
@@ -247,6 +248,8 @@ public class FileHandler {
                         + "error in line " + lineCounter);
             case 3: 
                 return new Exception("EOF reached sooner than expected");
+            case 4:
+                return new Exception("Too few bodies to integrate, must be greater or equal to 2");
         }
         
         return null;

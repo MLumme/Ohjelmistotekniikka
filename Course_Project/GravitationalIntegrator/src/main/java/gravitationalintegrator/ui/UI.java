@@ -4,16 +4,15 @@ package gravitationalintegrator.ui;
 import gravitationalintegrator.domain.Body;
 import gravitationalintegrator.domain.IntegratorHandler;
 import gravitationalintegrator.domain.IntegratorTask;
-import gravitationalintegrator.domain.Sys;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import javafx.application.Application;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -27,7 +26,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -39,9 +40,10 @@ public class UI extends Application {
     IntegratorHandler intHandler;
     IntegratorTask intTask;
     TableView table;
-    Menu menu;
+    Text sysHeader;
+    Menu fileMenu;
+    Menu helpMenu;
     MenuBar menuBar;
-    ArrayList<Sys> steps;
     Alert dialogue;
 
     
@@ -57,8 +59,9 @@ public class UI extends Application {
     @Override
     public void start(Stage stage) {
         dialogue = new Alert(AlertType.NONE);
+        dialogue.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
         
-        menu = new Menu("File");
+        fileMenu = new Menu("File");
         
         //Menu item to open file with the parameters for bodies to integrate
         MenuItem loadNewData = new MenuItem("Load data");
@@ -122,23 +125,52 @@ public class UI extends Application {
             }            
         });
         
-        menu.getItems().add(loadNewData);
-        menu.getItems().add(loadOldData);
-        menu.getItems().add(saveSim);
+        fileMenu.getItems().add(loadNewData);
+        fileMenu.getItems().add(loadOldData);
+        fileMenu.getItems().add(saveSim);
+        
+        helpMenu = new Menu("Help");
+        
+        MenuItem controls = new MenuItem("Controls");
+        controls.setOnAction((event) -> {
+            helpDialogue(2);
+        });
+        
+        MenuItem formatting = new MenuItem("File Formating");
+        formatting.setOnAction((event) -> {
+            helpDialogue(1);    
+        });        
+        
+        helpMenu.getItems().add(controls);
+        helpMenu.getItems().add(formatting);
         
         menuBar = new MenuBar();
-        menuBar.getMenus().add(menu);
+        menuBar.getMenus().add(fileMenu);
+        menuBar.getMenus().add(helpMenu);
 
+        //Add text to tell current time of the step to user 
+        sysHeader = new Text("Time of currently displayed step: "
+                + intHandler.getCurrT() / (24 * 3600) + "d," 
+                + " number if integrated steps: " + intHandler.getStepCount());
+        
+        //Call builder to construct table
         tableBuilder();
         
         VBox dataScene = new VBox(menuBar);
+        dataScene.setPadding(new Insets(5.0, 5.0, 5.0, 5.0 ));
+        dataScene.setSpacing(5.0);
+        dataScene.getChildren().add(sysHeader);
         dataScene.getChildren().add(table);
 
         //Add input for total simulation time and timestep, run button
         HBox simControl = new HBox();
+        simControl.setSpacing(5.0);
+        
         ProgressBar intProg = new ProgressBar(0.0);
+        intProg.setPrefWidth(600);
         
         Button run = new Button("Run");
+        run.setPrefWidth(75);
         run.setOnAction((event) -> {
             //check if old integration is still running
             if (intRunning()) {
@@ -148,7 +180,7 @@ public class UI extends Application {
             //Check that simulation values are usable
             if (intHandler.isSysEmpty()) {
                 errorDialogue("No bodies to integrate");
-            } else if (intHandler.areTimesOk()) {
+            } else if (!intHandler.areTimesOk()) {
                 errorDialogue("Unacceptable time values");
             //Continue to creating a Task for running the integration, without
             //freezing ui
@@ -168,9 +200,17 @@ public class UI extends Application {
                         //sys-object is always the last timestep
                         table.setItems(FXCollections.observableArrayList(intHandler.getCurrBodies()));
                         
+                        sysHeader.setText("Time of currently displayed step: " 
+                                + intHandler.getCurrT() / (24 * 3600) + "d," 
+                                + " number if integrated steps: " + intHandler.getStepCount());
+                        
                         dialogue.setAlertType(AlertType.INFORMATION);
                         dialogue.setContentText("Integration completed");
+                        dialogue.setTitle("Success!");
+                        dialogue.setHeaderText("Success!");
                         dialogue.show(); 
+                        
+                        intTask = null;
                         
                     } catch (InterruptedException | ExecutionException err) {
                         errorDialogue(err.getMessage());
@@ -179,40 +219,43 @@ public class UI extends Application {
                 
                 //Tie task to progress bar
                 intProg.progressProperty().bind(intTask.progressProperty());
-
-                //Thread for running the integration
-                Thread intThread = new Thread(intTask);
-                intThread.setDaemon(true);
-                intThread.start();
+                
+                //Ask intHandler to setup and run a thrad for intTask
+                intHandler.startInt();
             }
         });
         
         //Integration controls
-        Label totalTLabel = new Label("T (s):");
-        Label deltaTLabel = new Label("dT (s):");  
+        Label totalTLabel = new Label("T (d):");
+        totalTLabel.setPrefWidth(35);
+        Label deltaTLabel = new Label("dT (d):");  
+        deltaTLabel.setPrefWidth(35);
         
         TextField totalTField = new TextField();
-        totalTField.setText(Double.toString(intHandler.getTotalT()));
+        totalTField.setPrefWidth(100);
+        totalTField.setText(Double.toString(intHandler.getTotalT() / (24 * 3600)));
         
         TextField deltaTField = new TextField();
-        deltaTField.setText(Double.toString(intHandler.getDeltaT()));
+        deltaTField.setPrefWidth(100);
+        deltaTField.setText(Double.toString(intHandler.getDeltaT() / (24 * 3600)));
         
         //button for submitting total runtime and timestep, shows error if 
         //unable to parse as double, or value not usable
         Button submit = new Button("Submit");
+        submit.setPrefWidth(75);
         submit.setOnAction((event) -> {
             if (intRunning()) {
                 return;
             }
             
             try {
-                double tempT = Double.parseDouble(totalTField.getText());
+                double tempT = Double.parseDouble(totalTField.getText()) * 24 * 3600;
                
                 if (tempT <= 0.0) {
                     errorDialogue("T-value must be greater than 0");
                 } else {
                     try {
-                        double tempDT = Double.parseDouble(deltaTField.getText());
+                        double tempDT = Double.parseDouble(deltaTField.getText()) * 24 * 3600;
                         
                         if (tempDT <= 0.0) {
                             errorDialogue("T-value must be greater than 0");
@@ -247,7 +290,60 @@ public class UI extends Application {
     private void errorDialogue(String msg) {
         dialogue.setAlertType(AlertType.ERROR);
         dialogue.setContentText(msg);
+        dialogue.setTitle("Error!");
+        dialogue.setHeaderText("Error!");
         dialogue.show();     
+    }
+    
+    private void helpDialogue(int type) {
+        dialogue.setAlertType(AlertType.INFORMATION);
+        String form = "Input file rows: \n\n" +
+                "GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0\n" +
+                "GM_1 x_1 y_1 z_1 vx_1 vy_1 vz_1\n" +
+                "...\n\n" + 
+                "where GM is standard gravitational parameter" + 
+                " of body, in units km^3/s^2, x,y,z are location" + 
+                " vector components in km, and vx,vy,vz velocity" + 
+                " componets in km/s.\n\n" + 
+                "Output file will follow form: \n\n" +
+                "nSteps nBodies\n" +
+                "T1 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0 GM_1 x_1...\n" +
+                "T2 GM_0 x_0 y_0 z_0 vx_0 vy_0 vz_0 GM_1 x_1...\n" +
+                "...\n\n" +
+                "where nSteps is the number of integration steps and initial" +
+                " step, and nBodies is number of bodies in integrated system" +
+                ", T:s are times at timestep in seconds, rest as" + 
+                " in input file. Loading old integrations uses same" + 
+                " formatting as output.";
+
+        String cont = "Loading a new system to integrate:\n" + 
+                "File-menu -> Load data\n\n" + 
+                "Loading old integration to continue:\n" +
+                "File-menu -> Load simulation\n\n" +
+                "Saving simulation steps:\n" + 
+                "File-menu -> Save simulation\n\n" + 
+                "Setting integration timespan and timestep, insert span to " + 
+                "tesxbox marked T, timestep to box dT, confirm by pressing " +
+                "Submit-button, T can be smaller than dT or not exactly" + 
+                " divisible by dT, in such cases time of last integrated step" +
+                " will be within dT above T.\n\n" + 
+                "Once something to simulate has been loaded in and timevalues" + 
+                " are set integration can be started by pressing Run-button.";
+                
+        switch (type) {
+            case 1: 
+                dialogue.setContentText(form);
+                dialogue.setTitle("Formatting");
+                dialogue.setHeaderText("File formatting");
+                dialogue.show();
+                break;
+            case 2:
+                dialogue.setContentText(cont);
+                dialogue.setTitle("Controls");
+                dialogue.setHeaderText("Program controls");
+                dialogue.show();
+                break;
+        }
     }
     
     /**
