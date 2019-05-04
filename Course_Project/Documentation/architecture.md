@@ -66,7 +66,7 @@ Saving integration steps
 ------------------------
 Saving happens by selecting Save simulation from same old File-menu, and starts the following sequence:
 
-![Sequence diagram for saving integration steps](https://github.com/MLumme/Ohjelmistotekniikka/blob/master/Course_Project/Documentation/seq_save_sys.png)
+![Sequence diagram for saving integration steps](https://github.com/MLumme/Ohjelmistotekniikka/blob/master/Course_Project/Documentation/seq_save_steps.png)
 
 Integration
 -----------
